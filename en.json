@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "title": "Lesson 1: Environment & 2D/3D Movement Basics in C#",
+        "body": "<p>Welcome to <strong>nurma</strong>. Setting up .NET SDK and writing our first player controller script.</p><h3>Basic Movement Script:</h3><pre><code>using Godot;\nusing System;\n\npublic partial class Player3D : CharacterBody3D\n{\n    [Export] private float Speed = 5.0f;\n\n    public override void _PhysicsProcess(double delta)\n    {\n        Vector3 vel = Velocity;\n        Vector2 input = Input.GetVector(\"ui_left\", \"ui_right\", \"ui_up\", \"ui_down\");\n        Vector3 dir = new Vector3(input.X, 0, input.Y).Normalized();\n\n        if (dir != Vector3.Zero)\n        {\n            vel.X = dir.X * Speed;\n            vel.Z = dir.Z * Speed;\n        }\n        else\n        {\n            vel.X = Mathf.MoveToward(Velocity.X, 0, Speed);\n            vel.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);\n        }\n        Velocity = vel;\n        MoveAndSlide();\n    }\n}</code></pre>"
+    },
+    {
+        "id": 2,
+        "title": "Lesson 2: Double Jump, Dash & Advanced Camera",
+        "body": "<p>Implementing double jump mechanics and dash controls.</p><h3>Double Jump Code:</h3><pre><code>using Godot;\nusing System;\n\npublic partial class PlayerAdvanced : CharacterBody3D\n{\n    [Export] private float JumpForce = 4.5f;\n    private bool canDoubleJump = false;\n\n    public override void _PhysicsProcess(double delta)\n    {\n        Vector3 vel = Velocity;\n        if (!IsOnFloor()) vel += GetGravity() * (float)delta;\n        else canDoubleJump = true;\n\n        if (Input.IsActionJustPressed(\"ui_accept\"))\n        {\n            if (IsOnFloor()) { vel.Y = JumpForce; }\n            else if (canDoubleJump) { vel.Y = JumpForce * 0.85f; canDoubleJump = false; }\n        }\n        Velocity = vel;\n        MoveAndSlide();\n    }\n}</code></pre>"
+    },
+    {
+        "id": 3,
+        "title": "Lesson 3: Wall Climbing & Stairs Handling",
+        "body": "<p>Handling complex collisions, stair stepping, and wall sliding in Godot 4.7.</p>"
+    },
+    {
+        "id": 4,
+        "title": "Lesson 4: Pause Menus, Gacha Loot Boxes & Shop",
+        "body": "<p>Building UI pause menus and randomized Gacha reward systems in C#.</p>"
+    },
+    {
+        "id": 5,
+        "title": "Lesson 5: Realistic Vehicle Physics (Need for Speed Style)",
+        "body": "<p>Configuring <code>VehicleBody3D</code> for realistic car physics, steering, and engine torque.</p>"
+    },
+    {
+        "id": 6,
+        "title": "Lesson 6: Battle Royale (PUBG/Free Fire) & Indie Game Scale",
+        "body": "<p>Architecting massive open worlds, multiplayer synchronization, and scaling Indie games with Godot 4.7 and C#.</p>"
+    }
+]

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nurma | Godot 4.7 C# Masterclass</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- الهيدر العلوي وشعار الرمانة الأيقوني -->
+    <header>
+        <div class="logo-container">
+            <img src=".trashed-1789903239-Untitled1_20260821120508.png" alt="Nurma Logo">
+            <h1>nurma <span>Godot 4.7 C# Academy</span></h1>
+        </div>
+        <div class="nav-controls">
+            <span id="progress-indicator">التقدم: 0%</span>
+            <button class="lang-btn" onclick="setLanguage('ar')">عربي</button>
+            <button class="lang-btn" onclick="setLanguage('en')">English</button>
+        </div>
+    </header>
+
+    <!-- التخطيط الرئيسي -->
+    <div class="main-layout">
+        <!-- القائمة الجانبية للدروس -->
+        <aside class="sidebar">
+            <h3 id="sidebar-title">فهرس المنهج الشامل</h3>
+            <ul id="lessons-list">
+                <!-- يتم تعبئتها ديناميكياً -->
+            </ul>
+        </aside>
+
+        <!-- منطقة عرض الدرس -->
+        <main class="content-area" id="lesson-content">
+            <!-- سيتم تحميل الدرس هنا -->
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

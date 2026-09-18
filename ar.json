@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "title": "الدرس 1: البيئة وتحريك اللاعب 2D و 3D أساسيات C#",
+        "body": "<p>مرحباً بك في منصة <strong>nurma</strong>. نبدأ بتثبيت .NET SDK وربط محرر الأكواد بـ Godot 4.7 لكتابة أول سكربت حركة.</p><h3>كود الحركة الأساسية لـ CharacterBody3D:</h3><pre><code>using Godot;\nusing System;\n\npublic partial class Player3D : CharacterBody3D\n{\n    [Export] private float Speed = 5.0f;\n\n    public override void _PhysicsProcess(double delta)\n    {\n        Vector3 vel = Velocity;\n        Vector2 input = Input.GetVector(\"ui_left\", \"ui_right\", \"ui_up\", \"ui_down\");\n        Vector3 dir = new Vector3(input.X, 0, input.Y).Normalized();\n\n        if (dir != Vector3.Zero)\n        {\n            vel.X = dir.X * Speed;\n            vel.Z = dir.Z * Speed;\n        }\n        else\n        {\n            vel.X = Mathf.MoveToward(Velocity.X, 0, Speed);\n            vel.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);\n        }\n        Velocity = vel;\n        MoveAndSlide();\n    }\n}</code></pre><h3>شرح الكود حرفاً بحرف:</h3><p>• <code>using Godot;</code>: استدعاء مكتبة غودوت الأساسية.</p><p>• <code>public partial class Player3D : CharacterBody3D</code>: تعريف كلاس اللاعب الموروث من الكائن الحركي ثلاثي الأبعاد.</p><p>• <code>[Export]</code>: لجعل المتغير مرئياً وقابلاً للتعديل من لوحة الـ Inspector.</p><p>• <code>_PhysicsProcess</code>: دالة فيزيائية تتكرر بانتظام مع كل إطار زمني.</p><p>• <code>MoveAndSlide()</code>: دالة غودوت لمعالجة الحركة والاصطدامات بمرونة.</p>"
+    },
+    {
+        "id": 2,
+        "title": "الدرس 2: القفز المزدوج، الداش (Dash) والكاميرا المتقدمة",
+        "body": "<p>نتعلم في هذا الدرس إضافة القفز المزدوج واندفاع السرعة المفاجئ (Dash) وتحريك الكاميرا بسلاسة.</p><h3>كود القفز المزدوج والداش:</h3><pre><code>using Godot;\nusing System;\n\npublic partial class PlayerAdvanced : CharacterBody3D\n{\n    [Export] private float JumpForce = 4.5f;\n    private bool canDoubleJump = false;\n\n    public override void _PhysicsProcess(double delta)\n    {\n        Vector3 vel = Velocity;\n        if (!IsOnFloor()) vel += GetGravity() * (float)delta;\n        else canDoubleJump = true;\n\n        if (Input.IsActionJustPressed(\"ui_accept\"))\n        {\n            if (IsOnFloor()) { vel.Y = JumpForce; }\n            else if (canDoubleJump) { vel.Y = JumpForce * 0.85f; canDoubleJump = false; }\n        }\n        Velocity = vel;\n        MoveAndSlide();\n    }\n}</code></pre><h3>شرح الكود سطرًا بسطر:</h3><p>• <code>IsOnFloor()</code>: تفحص إن كان اللاعب يلمس الأرض.</p><p>• <code>canDoubleJump</code>: متغير منطقي لتنفيذ قفزة إضافية واحدة في الهواء.</p>"
+    },
+    {
+        "id": 3,
+        "title": "الدرس 3: تسلق الجدران وصعود الدرج (Stairs & Wall Climb)",
+        "body": "<p>معالجة اصطدامات الدرج وتسلق الجدران (Wall Slide & Climb) ببرمجيات دقيقة.</p><h3>كود تسلق الجدران:</h3><pre><code>using Godot;\nusing System;\n\npublic partial class WallSystem : CharacterBody3D\n{\n    public override void _PhysicsProcess(double delta)\n    {\n        Vector3 vel = Velocity;\n        if (IsOnWall() && !IsOnFloor() && Input.IsActionPressed(\"ui_up\"))\n        {\n            vel.Y = 2.5f;\n        }\n        Velocity = vel;\n        MoveAndSlide();\n    }\n}</code></pre>"
+    },
+    {
+        "id": 4,
+        "title": "الدرس 4: القوائم (Pause Menu)، فتح البكجات (Gacha) والمتجر",
+        "body": "<p>تصميم قائمة الإيقاف المؤقت (Pause Menu) وبناء نظام فتح الصناديق العشوائي (Gacha) بـ C#.</p><h3>كود نظام سحب البكجات:</h3><pre><code>using Godot;\nusing System;\n\npublic partial class GachaSystem : Node\n{\n    private RandomNumberGenerator rng = new RandomNumberGenerator();\n\n    public string DrawItem()\n    {\n        rng.Randomize();\n        float roll = rng.RandfRange(0, 100);\n        if (roll <= 5) return \"أسطوري نادر جداً (Legendary)\";\n        return \"عنصر عادٍ (Common)\";\n    }\n}</code></pre>"
+    },
+    {
+        "id": 5,
+        "title": "الدرس 5: فيزياء السيارات الواقعية (Need for Speed Style)",
+        "body": "<p>بناء سيارة تحاكي ألعاب السباق الواقعية باستخدام عقدة <code>VehicleBody3D</code> ونظام عزم الدوران.</p><h3>كود تحكم السيارة:</h3><pre><code>using Godot;\nusing System;\n\npublic partial class CarController : VehicleBody3D\n{\n    [Export] private float EnginePower = 400.0f;\n    [Export] private float SteeringLimit = 0.4f;\n\n    public override void _PhysicsProcess(double delta)\n    {\n        EngineForce = Input.GetAxis(\"ui_down\", \"ui_up\") * EnginePower;\n        Steering = Input.GetAxis(\"ui_right\", \"ui_left\") * SteeringLimit;\n    }\n}</code></pre>"
+    },
+    {
+        "id": 6,
+        "title": "الدرس 6: ألعاب الباتل رويال (PUBG / Free Fire) والـ Indie",
+        "body": "<p>نظرة هندسية متقدمة على إدارة الخرائط المفتوحة الضخمة، المزامنة الشبكية (Multiplayer)، وتطوير ألعاب الـ Indie المستقلة عبر Godot 4.7 و C#.</p>"
+    }
+]
